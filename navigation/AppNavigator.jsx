@@ -26,7 +26,7 @@ function MainTabs() {
 export default function AppNavigator() {
   return (
     <NavigationContainer>
-      <Stack.Navigator  initialRouteName="SignIn">
+      <Stack.Navigator  initialRouteName="Main">
         <Stack.Screen options={{headerTitle:"Inunity-Note-App"}} name="SignIn" component={SignInScreen} />
         <Stack.Screen options={{headerTitle:"Inunity-Note-App"}} name="SignUp" component={SignUpScreen} />
         <Stack.Screen options={{headerTitle:"Inunity-Note-App"}} name="Main" component={MainTabs} />
