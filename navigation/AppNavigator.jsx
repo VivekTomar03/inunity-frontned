@@ -16,9 +16,9 @@ const Tab = createBottomTabNavigator();
 function MainTabs() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Notes" component={NotesScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen options={{ headerShown: false }}  name="Home" component={HomeScreen} />
+      <Tab.Screen options={{ headerShown: false }}  name="Notes" component={NotesScreen} />
+      <Tab.Screen options={{ headerShown: false }}  name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
 }
@@ -26,10 +26,10 @@ function MainTabs() {
 export default function AppNavigator() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="SignIn">
-        <Stack.Screen name="SignIn" component={SignInScreen} />
-        <Stack.Screen name="SignUp" component={SignUpScreen} />
-        <Stack.Screen name="Main" component={MainTabs} />
+      <Stack.Navigator  initialRouteName="SignIn">
+        <Stack.Screen options={{headerTitle:"Inunity-Note-App"}} name="SignIn" component={SignInScreen} />
+        <Stack.Screen options={{headerTitle:"Inunity-Note-App"}} name="SignUp" component={SignUpScreen} />
+        <Stack.Screen options={{headerTitle:"Inunity-Note-App"}} name="Main" component={MainTabs} />
       </Stack.Navigator>
     </NavigationContainer>
   );

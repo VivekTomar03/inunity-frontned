@@ -1,9 +1,57 @@
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, TextInput, Button, Platform, Dimensions, Text } from 'react-native';
 import styled from 'styled-components/native';
 const { width, height } = Dimensions.get('window');
 import { LinearGradient } from 'expo-linear-gradient';
+import { AuthContext } from '../context/AuthContext';
+
+
+export default function SignUpScreen({ navigation }) {
+  const { register } = useContext(AuthContext);
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+
+  const [password, setPassword] = useState('');
+
+
+  const handleSignUpPress = () => {
+    navigation.navigate('SignIn'); 
+  };
+  const handleSignUp = () => {
+    register(name , email, password)
+      .then((res) => {
+        navigation.navigate('SignIn'); 
+        alert(res.message)
+      })
+      .catch(error => {
+        console.error('Signup error:', error);
+      });
+  };
+  return (
+    <LinearGradient
+    colors={['#ff6b6b','#ff6b6b', '#ffb6b9']}
+    start={[0, 0]} 
+    end={[1, 1]} 
+   style={{
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center"
+    }}
+    >
+      <Container>
+      <AuthContainer>
+        <Title>Sign Up</Title>
+        <Input placeholder="Name" value={name} onChangeText={setName} />
+        <Input placeholder="Email" value={email} onChangeText={setEmail} />
+        <Input placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry />
+        <StyledButton title="Sign In" onPress={handleSignUp} />
+        <Text style={{ marginTop: 10 }}>Already have an account? <Text style={{ color: 'blue' }} onPress={handleSignUpPress}>Sign In</Text></Text>
+      </AuthContainer>
+    </Container>
+    </LinearGradient>
+  );
+}
 const Container = styled.View`
   flex: 1;
   justify-content: center;
@@ -13,7 +61,7 @@ const Container = styled.View`
 
 const AuthContainer = styled.View`
   width: ${Platform.OS === 'web' ? width * 0.35 : width * 0.8}px;
-   height: ${Platform.OS === 'web' ? height * 0.6 : height * 0.4}px;
+   height: ${Platform.OS === 'web' ? height * 0.8 : height * 0.4}px;
   padding: ${height * 0.03}px;
   border-radius: ${height * 0.03}px;
   background-color: #fff;
@@ -41,34 +89,3 @@ const Input = styled.TextInput`
 const StyledButton = styled.Button`
   margin-top: ${height * 0.03}px;
 `;
-
-export default function SignUpScreen({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const handleSignUpPress = () => {
-    navigation.navigate('SignIn'); 
-  };
-
-  return (
-    <LinearGradient
-    colors={['#ff6b6b','#ff6b6b', '#ffb6b9']}
-    start={[0, 0]} 
-    end={[1, 1]} 
-   style={{
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center"
-    }}
-    >
-      <Container>
-      <AuthContainer>
-        <Title>Sign Up</Title>
-        <Input placeholder="Email" value={email} onChangeText={setEmail} />
-        <Input placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry />
-        <StyledButton title="Sign In" onPress={() => {}} />
-        <Text style={{ marginTop: 10 }}>Already have an account? <Text style={{ color: 'blue' }} onPress={handleSignUpPress}>Sign In</Text></Text>
-      </AuthContainer>
-    </Container>
-    </LinearGradient>
-  );
-}
