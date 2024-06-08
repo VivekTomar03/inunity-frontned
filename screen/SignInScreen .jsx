@@ -4,25 +4,58 @@ import { View, TextInput, Button, Text, Dimensions, Platform } from 'react-nativ
 import styled from 'styled-components/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { AuthContext } from '../context/AuthContext';
+import Toast from 'react-native-toast-message';
 const { width, height } = Dimensions.get('window');
 
+
 export default function SignInScreen( {navigation }) {
-  const { login , user} = useContext(AuthContext);
+  const { login , setLoading, loading, user} = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-
-
+  useEffect(() => {
+   if(user?.token) {
+    navigation.navigate("Main")
+   }
+  },[navigation, user?.token])
 
   const handleSignInPress = async () => {
-   
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      setLoading(false);
+      Toast.show({
+        type: 'error',
+        text1: 'Invalid Email',
+        text2: 'Please enter a valid email address',
+      });
+      return;
+    }
+    if (!password) {
+      setLoading(false);
+      Toast.show({
+        type: 'error',
+        text1: 'Please Fill All Details',
+        text2: '',
+      });
+      return;
+    }
+    setLoading(true)
     try {
      let resData =  await login(email, password);
-      alert(resData?.message)
+     setLoading(false)
+     Toast.show({
+      type: 'success',
+      text1: 'Hello '+ resData?.userData?.name,
+      text2:  resData?.message
+    });
       navigation.navigate('Main'); 
     } catch (error) {
-      console.error(error);
-      
+      setLoading(false)
+      Toast.show({
+        type: 'error',
+        text1: "LoginFailed",
+        text2:  error?.message,
+      });
     }
   };
   const handleSignUpPress = () => {
@@ -43,9 +76,9 @@ export default function SignInScreen( {navigation }) {
       <Container>
       <AuthContainer>
         <Title>Sign In</Title>
-        <Input placeholder="Email" value={email} onChangeText={setEmail} />
-        <Input placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry />
-        <StyledButton title="Sign In" onPress={handleSignInPress} />
+        <Input keyboardType="email-address" autoCapitalize="none"  placeholder="Email" value={email} onChangeText={setEmail} />
+        <Input   placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry />
+        <StyledButton disabled={loading} title="Sign In" onPress={handleSignInPress} />
         <Text style={{ marginTop: 10 }}>Don't have an account? <Text style={{ color: 'blue' }} onPress={handleSignUpPress}>Sign Up</Text></Text>
       </AuthContainer>
     </Container>

@@ -2,12 +2,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
+import Toast from 'react-native-toast-message';
 import { Button } from 'react-native';
 import SignInScreen from '../screen/SignInScreen ';
 import SignUpScreen from '../screen/SignUpScreen';
 import HomeScreen from '../screen/HomeScreen.js';
 import NotesScreen from '../screen/NotesScreen.jsx';
 import ProfileScreen from '../screen/ProfileScreen.jsx';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const Stack = createStackNavigator();
@@ -23,14 +25,16 @@ function MainTabs() {
   );
 }
 
-export default function AppNavigator() {
+export default function AppNavigator () {
+ 
   return (
     <NavigationContainer>
-      <Stack.Navigator  initialRouteName="Main">
+      <Stack.Navigator  initialRouteName="SignIn">
         <Stack.Screen options={{headerTitle:"Inunity-Note-App"}} name="SignIn" component={SignInScreen} />
         <Stack.Screen options={{headerTitle:"Inunity-Note-App"}} name="SignUp" component={SignUpScreen} />
-        <Stack.Screen options={{headerTitle:"Inunity-Note-App"}} name="Main" component={MainTabs} />
+        <Stack.Screen options={{headerTitle:"Inunity-Note-App", headerLeft: null}} name="Main" component={MainTabs} />
       </Stack.Navigator>
+      <Toast />
     </NavigationContainer>
   );
 }

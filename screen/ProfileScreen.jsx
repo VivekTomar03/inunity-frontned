@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, Text, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styled from 'styled-components/native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { AuthContext } from '../context/AuthContext';
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
   const [userData, setUserData] = useState(null);
+  const { logout } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -22,6 +24,13 @@ const ProfileScreen = () => {
     fetchUserData();
   }, []);
 
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('token');
+    await AsyncStorage.removeItem('userData');
+    logout();
+    navigation.navigate('SignIn');
+  };
+
   if (!userData) {
     return (
       <Container>
@@ -32,35 +41,36 @@ const ProfileScreen = () => {
 
   return (
     <LinearGradient
-    colors={['#ff6b6b','#ff6b6b', '#ffb6b9']}
-    start={[0, 0]} 
-    end={[1, 1]} 
-   style={{
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center"
-    }}
+      colors={['#ff6b6b','#ff6b6b', '#ffb6b9']}
+      start={[0, 0]} 
+      end={[1, 1]} 
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center"
+      }}
     >
-  <Container>
-      <Title>Profile</Title>
-      <ProfileCard>
-        <ProfileItem>
-          <Label>Name:</Label>
-          <Value>{userData.name}</Value>
-        </ProfileItem>
-        <ProfileItem>
-          <Label>Email:</Label>
-          <Value>{userData.email}</Value>
-        </ProfileItem>
-        <ProfileItem>
-          <Label>Bio:</Label>
-          <Value>Enthusiastic developer with a passion for creating innovative solutions.</Value>
-        </ProfileItem>
-      </ProfileCard>
-    </Container>
-
+      <Container>
+        <Title>Profile</Title>
+        <ProfileCard>
+          <ProfileItem>
+            <Label>Name:</Label>
+            <Value>{userData.name}</Value>
+          </ProfileItem>
+          <ProfileItem>
+            <Label>Email:</Label>
+            <Value>{userData.email}</Value>
+          </ProfileItem>
+          <ProfileItem>
+            <Label>Bio:</Label>
+            <Value>Enthusiastic developer with a passion for creating innovative solutions.</Value>
+          </ProfileItem>
+        </ProfileCard>
+        <LogoutButton onPress={handleLogout}>
+          <LogoutButtonText>Logout</LogoutButtonText>
+        </LogoutButton>
+      </Container>
     </LinearGradient>
-  
   );
 };
 
@@ -105,6 +115,18 @@ const Value = styled.Text`
 const LoadingText = styled.Text`
   font-size: 18px;
   color: #555;
+`;
+
+const LogoutButton = styled.TouchableOpacity`
+  background-color: #2196F3;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin-top: 20px;
+`;
+
+const LogoutButtonText = styled.Text`
+  color: white;
+  font-weight: bold;
 `;
 
 export default ProfileScreen;

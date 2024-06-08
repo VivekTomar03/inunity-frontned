@@ -2,16 +2,16 @@
 import React, { useContext, useState } from 'react';
 import { View, TextInput, Button, Platform, Dimensions, Text } from 'react-native';
 import styled from 'styled-components/native';
+import Toast from 'react-native-toast-message';
 const { width, height } = Dimensions.get('window');
 import { LinearGradient } from 'expo-linear-gradient';
 import { AuthContext } from '../context/AuthContext';
 
 
 export default function SignUpScreen({ navigation }) {
-  const { register } = useContext(AuthContext);
+  const { register ,  setLoading, loading} = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
-
   const [password, setPassword] = useState('');
 
 
@@ -19,13 +19,43 @@ export default function SignUpScreen({ navigation }) {
     navigation.navigate('SignIn'); 
   };
   const handleSignUp = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      setLoading(false);
+      Toast.show({
+        type: 'error',
+        text1: 'Invalid Email',
+        text2: 'Please enter a valid email address',
+      });
+      return;
+    }
+    if (!password || !name) {
+      setLoading(false);
+      Toast.show({
+        type: 'error',
+        text1: 'Please Fill All Details',
+        text2: '',
+      });
+      return;
+    }
+    setLoading(true);
+   
     register(name , email, password)
       .then((res) => {
+        setLoading(false);
+        Toast.show({
+          type: 'success',
+          text1:  res?.message
+        });
         navigation.navigate('SignIn'); 
-        alert(res.message)
+       
       })
       .catch(error => {
-        console.error('Signup error:', error);
+       setLoading(false);
+       Toast.show({
+        type: 'error',
+        text1:  "Something Went Wrong"
+      });
       });
   };
   return (
@@ -45,7 +75,7 @@ export default function SignUpScreen({ navigation }) {
         <Input placeholder="Name" value={name} onChangeText={setName} />
         <Input placeholder="Email" value={email} onChangeText={setEmail} />
         <Input placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry />
-        <StyledButton title="Sign In" onPress={handleSignUp} />
+        <StyledButton disabled={loading} title="Sign Up" onPress={handleSignUp} />
         <Text style={{ marginTop: 10 }}>Already have an account? <Text style={{ color: 'blue' }} onPress={handleSignUpPress}>Sign In</Text></Text>
       </AuthContainer>
     </Container>

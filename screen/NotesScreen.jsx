@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Modal, TextInput, Button, FlatList, ActivityIndicator, Platform } from 'react-native';
+import {LogBox , View, Text, TouchableOpacity, Modal, TextInput, Button, FlatList, ActivityIndicator, Platform } from 'react-native';
 import styled from 'styled-components/native';
 import { NotesContext } from '../context/NotesContext';
 import ColorPicker from 'react-native-wheel-color-picker';
@@ -13,6 +13,9 @@ const NotesScreen = () => {
 
   useEffect(() => {
     getNotes();
+    LogBox.ignoreLogs([
+      'Node of type rule not supported as an inline style',
+    ]);
   }, []);
 
   const handleSaveNote = async () => {
@@ -186,8 +189,6 @@ const EditButton = styled.Text`
   font-weight: bold;
   text-align: center;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease-in-out;
 
   &:hover {
     background-color: #0056b3;
@@ -203,8 +204,6 @@ const DeleteButton = styled.Text`
   font-weight: bold;
   text-align: center;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease-in-out;
 
   &:hover {
     background-color: #c82333;
@@ -217,7 +216,7 @@ const AddButtonContainer = styled.View`
 `;
 
 const AddButton = styled.Text`
-  color: #007bff; /* Blue */
+  color: #007bff;
   font-size: 16px;
 `;
 
@@ -225,7 +224,6 @@ const ModalContainer = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
 `;
 
 const ModalContent = styled.View`
