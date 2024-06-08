@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { ActivityIndicator, FlatList, Text, TouchableOpacity, View } from 'react-native';
 import styled from 'styled-components/native';
 import { NotesContext } from '../context/NotesContext';
+import EmptyDataMessage from '../components/EmptyDataMessage';
 
 
 const HomeScreen = ({navigation}) => {
@@ -61,12 +62,13 @@ const HomeScreen = ({navigation}) => {
       </Banner>
 
       <FlatList
-        data={notes.slice(6).reverse()}
+      ListEmptyComponent={notes.length===0 && <EmptyDataMessage btn={true}/>}
+       data={notes.length > 4 ? notes.slice(-4).reverse() : notes}
         renderItem={renderNote}
         keyExtractor={(item) => item._id}
         contentContainerStyle={{ paddingHorizontal: 10 }}
         ListHeaderComponent={<SectionTitle>Last 4 Notes</SectionTitle>}
-        ListFooterComponent={
+        ListFooterComponent={notes.length>0 &&
           <View style={{ alignItems: 'center', marginVertical: 20 }}>
             <TouchableOpacity onPress={handleViewAllNotes}>
               <FooterText>View All Notes</FooterText>
@@ -128,7 +130,7 @@ const NoteDates = styled.View`
 `;
 const FooterText = styled.Text`
   font-size: 16px;
-  color: #007bff; /* Blue */
+  color: #007bff; 
 `;
 
 export default HomeScreen;

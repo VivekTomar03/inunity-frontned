@@ -1,15 +1,13 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { AuthContext } from './AuthContext'; 
 import { getNotes as getNotesApi, createNote as createNoteApi, updateNote as updateNoteApi, deleteNote as deleteNoteApi } from '../Api/notes'; 
-
-// Initial state for notes
 const initialState = {
   loading: false,
   error: null,
   notes: [],
 };
 
-// Action types
+
 const actionTypes = {
   GET_NOTES_REQUEST: 'GET_NOTES_REQUEST',
   GET_NOTES_SUCCESS: 'GET_NOTES_SUCCESS',
@@ -25,7 +23,7 @@ const actionTypes = {
   DELETE_NOTE_FAILURE: 'DELETE_NOTE_FAILURE',
 };
 
-// Reducer function to manage state updates
+
 const reducer = (state, action) => {
   switch (action.type) {
     case actionTypes.GET_NOTES_REQUEST:
@@ -76,8 +74,10 @@ export const NotesProvider = ({ children }) => {
     try {
       const newNote = await createNoteApi(noteData, user.token);
       dispatch({ type: actionTypes.CREATE_NOTE_SUCCESS, payload: newNote });
+      return newNote;
     } catch (error) {
       dispatch({ type: actionTypes.CREATE_NOTE_FAILURE, payload: error.message });
+      return error;
     }
   };
 
@@ -104,7 +104,6 @@ export const NotesProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    // Fetch notes when the user changes
     if (user?.token) {
       getNotes();
     }

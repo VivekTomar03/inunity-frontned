@@ -9,7 +9,6 @@ import SignUpScreen from '../screen/SignUpScreen';
 import HomeScreen from '../screen/HomeScreen.js';
 import NotesScreen from '../screen/NotesScreen.jsx';
 import ProfileScreen from '../screen/ProfileScreen.jsx';
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const Stack = createStackNavigator();

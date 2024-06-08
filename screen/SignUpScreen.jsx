@@ -1,4 +1,3 @@
-
 import React, { useContext, useState } from 'react';
 import { View, TextInput, Button, Platform, Dimensions, Text } from 'react-native';
 import styled from 'styled-components/native';

@@ -3,6 +3,8 @@ import {LogBox , View, Text, TouchableOpacity, Modal, TextInput, Button, FlatLis
 import styled from 'styled-components/native';
 import { NotesContext } from '../context/NotesContext';
 import ColorPicker from 'react-native-wheel-color-picker';
+import EmptyDataMessage from '../components/EmptyDataMessage';
+
 
 const NotesScreen = () => {
   const { getNotes, createNote, updateNote, deleteNote, notes, loading, error } = useContext(NotesContext);
@@ -22,8 +24,8 @@ const NotesScreen = () => {
     if (selectedNote) {
       await updateNote(selectedNote._id, noteData);
     } else {
-     
       await createNote(noteData);
+      
     }
     setModalVisible(false);
     setNoteData({ title: '', description: '', color: '' });
@@ -92,6 +94,7 @@ const NotesScreen = () => {
   return (
     <Container>
       <FlatList
+      ListEmptyComponent={notes.length===0 && <EmptyDataMessage btn={false}/>}
         data={notes}
         renderItem={renderNote}
         keyExtractor={(item) => item._id}
