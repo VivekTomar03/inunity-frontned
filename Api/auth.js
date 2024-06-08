@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// const API_URL = 'https://inunity-backend.onrender.com';
-const API_URL = 'http://192.168.29.166:8080';
+const API_URL = 'https://inunity-backend.onrender.com';
+// const API_URL = 'http://192.168.29.166:8080';
 
 
 //  user registration
